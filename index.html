@@ -363,6 +363,19 @@ h2.mixed { text-transform: none; letter-spacing: 0.01em; line-height: 1.1; }
 h2.say { font-family: var(--font-serif, 'Playfair Display', Georgia, serif); font-weight: 600; text-transform: none; letter-spacing: 0; line-height: 1.3; font-size: clamp(1.1rem, 4.6vw, 2.4rem); text-wrap: initial; }
 h2.say .ln { white-space: nowrap; }
 h2.say b.by { font-weight: 800; }
+/* Index redesign */
+.idxwait { text-align: left; }
+.idxhint { margin: 10px 0 14px; color: var(--muted); font-size: 1.02rem; line-height: 1.5; }
+.idxprog { height: 6px; background: var(--line); }
+.idxprog i { display: block; height: 100%; width: 0; background: var(--red-fill); transition: width .25s ease; }
+.idxcount { margin: 8px 0 0; font-size: 0.85rem; color: var(--muted); }
+.idxgo { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); }
+.idxgo .btn[disabled] { opacity: 0.45; cursor: not-allowed; }
+.idxgohint { font-size: 0.85rem; color: var(--muted); }
+input[type=range].unset { opacity: 0.5; }
+.idxlinks { margin: 14px 0 0; font-size: 0.9rem; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.idxlinks a, .linkbtn { color: var(--gold); font-weight: 600; text-decoration: underline; background: none; border: 0; padding: 0; font-family: inherit; font-size: inherit; cursor: pointer; }
+#idxCapture button { white-space: nowrap; }
 /* Your move: outcome-led list */
 .beat .choices a { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 20px; align-items: center; }
 .beat .choices .ck, .beat .choices b, .beat .choices em { grid-column: 1; }
@@ -589,39 +602,40 @@ details.more > :not(summary) { margin-top: 12px; }
 </div>
   <div class="view" data-view="index" hidden>
   <ol class="journey" aria-label="Your path"><li class=on><a href="#index" aria-current=step>The mirror</a></li><li><a href="#chase">The cost</a></li><li><a href="#pledge">The pledge</a></li><li><a href="#team">Your team</a></li></ol>
-  <div class="vhead"><div class="eyebrow">Step 1 · The mirror</div><h2 tabindex="-1">The <span class="bz"><b><b class="by">BUSY</b></b>ness</span> Index</h2><p class="lead">Ten statements about your organization, scored from 1 (never) to 5 (always). It takes three minutes. Be honest. The sliders start at 3, so move each one to match what is true today.</p></div>
+  <div class="vhead"><div class="eyebrow">Step 1 · The mirror</div><h2 tabindex="-1">The <span class="bz"><b><b class="by">BUSY</b></b>ness</span> Index</h2><p class="lead">Ten statements about your organization, scored from 1 (never) to 5 (always). It takes three minutes. Be honest. Move each slider to match what is true today. Your score appears when all ten are answered.</p></div>
   <div class="two">
       <div class="panel">
         <div class="scale"><span>1 · Never</span><span>5 · Always</span></div>
         <div id="idxQs"></div>
+        <div class="idxgo"><button class="btn" id="idxShow" type="button" disabled>Show my score</button><span class="idxgohint" id="idxGoHint">Answer all ten to continue</span></div>
       </div>
       <div class="panel sticky" aria-live="polite">
-        <div class="eyebrow" style="margin:0">Your <span class="bz"><b>BUSY</b>ness</span> level</div>
-        <div class="score"><span id="idxScore">30</span><small> / 50</small></div>
-        <div class="level high" id="idxLevel">High <span class="bz"><b>BUSY</b>ness</span></div>
-        <div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i><span class="pin" id="idxPin"></span></div>
-        <div class="meter-lab"><span>Critical</span><span>High</span><span>Moderate</span><span>Low</span></div>
-        <p class="what" id="idxWhat"></p>
-        <div class="eyebrow" style="margin:16px 0 0;font-size:0.95rem">Address these first</div>
-        <ul class="first" id="idxFirst"></ul>
-        <div class="next">
-          <h3>Your next steps</h3>
-          <form class="capture" id="idxCapture" novalidate style="margin-top:0">
-            <input type="email" id="idxEmail" placeholder="Email me my score and the free chapter" autocomplete="email" aria-label="Email address" required>
-            <button class="btn small" type="submit">Send</button>
-          </form>
-          <label class="check"><input type="checkbox" id="idxSurvey" checked> Add my score, anonymously, to the State of <span class="bz"><b>BUSY</b>ness</span> survey of CEOs.</label>
-          <div class="toast" id="idxMsg" role="status"></div>
-          <ul style="margin-top:10px">
-            <li><b>Bring the book to your organization.</b> Discounts at 10+, 50+ and 100+ copies.</li>
-            <li><b>Book a KILL <span class="bz"><b>BUSY</b>ness</span> awareness session</b> for your leadership team.</li>
-          </ul>
-          <div class="row-btns">
-            <a class="btn small" href="https://www.KILLBUSYness.com" target="_blank" rel="noopener">Get the book</a>
-            <button class="btn small ghost" id="idxCopy" type="button">Copy my result</button>
-            <a class="btn small ghost" id="idxLinkedIn" href="#" target="_blank" rel="noopener">Post on LinkedIn</a>
+        <div id="idxWait" class="idxwait">
+          <div class="eyebrow" style="margin:0">Your <span class="bz"><b>BUSY</b>ness</span> level</div>
+          <p class="idxhint">Answer all ten statements and your score appears here.</p>
+          <div class="idxprog"><i id="idxBar"></i></div>
+          <p class="idxcount" id="idxCount">0 of 10 answered</p>
+        </div>
+        <div id="idxResult" hidden>
+          <div class="eyebrow" style="margin:0">Your <span class="bz"><b>BUSY</b>ness</span> level</div>
+          <div class="score"><span id="idxScore">0</span><small> / 50</small></div>
+          <div class="level high" id="idxLevel"></div>
+          <div class="meter" aria-hidden="true"><i></i><i></i><i></i><i></i><span class="pin" id="idxPin"></span></div>
+          <div class="meter-lab"><span>Critical</span><span>High</span><span>Moderate</span><span>Low</span></div>
+          <p class="what" id="idxWhat"></p>
+          <div class="eyebrow" style="margin:16px 0 0;font-size:0.95rem">Address these first</div>
+          <ul class="first" id="idxFirst"></ul>
+          <div class="next">
+            <h3>Get your result and the Introductory Chapter</h3>
+            <form class="capture" id="idxCapture" novalidate style="margin-top:0">
+              <input type="email" id="idxEmail" placeholder="Your email address" autocomplete="email" aria-label="Email address" required>
+              <button class="btn small" type="submit">Email me my result</button>
+            </form>
+            <label class="check"><input type="checkbox" id="idxSurvey" checked> <span>Add my score, anonymously, to the State of <span class="bz"><b>BUSY</b>ness</span> survey of CEOs.</span></label>
+            <div class="toast" id="idxMsg" role="status"></div>
+            <p class="idxlinks"><button class="linkbtn" id="idxCopy" type="button">Copy my result</button><span aria-hidden="true">&middot;</span><a id="idxLinkedIn" href="#" target="_blank" rel="noopener">Post on LinkedIn</a></p>
+            <div class="toast" id="idxCopyMsg" role="status"></div>
           </div>
-          <div class="toast" id="idxCopyMsg" role="status"></div>
         </div>
       </div>
     </div>
@@ -890,7 +904,7 @@ details.more > :not(summary) { margin-top: 12px; }
   }
   var PREVIEW = " (Preview only: in the live site this creates your free app account.)";
   wireCapture("heroCapture", "heroEmail", "heroMsg", "Thank you. The free chapter and your app access are on their way." + PREVIEW);
-  wireCapture("idxCapture", "idxEmail", "idxMsg", "Thank you. Your score and the free chapter are on their way." + PREVIEW);
+  wireCapture("idxCapture", "idxEmail", "idxMsg", "Thank you. Your result and the Introductory Chapter are on their way." + PREVIEW);
 
   /* ---- BUSYness Index (statements and bands from the book) ---- */
   var qs = [
@@ -906,13 +920,15 @@ details.more > :not(summary) { margin-top: 12px; }
     "This culture would survive the departure of the entire senior leadership team."
   ];
   var vals = qs.map(function () { return 3; });
+  var answered = qs.map(function () { return false; });
+  var revealed = false;
   var wrap = $("idxQs");
   qs.forEach(function (q, i) {
     var row = document.createElement("div"); row.className = "q";
-    row.innerHTML = '<label for="iq' + i + '">' + (i + 1) + ". " + esc(q) + '</label><div class="r"><input type="range" id="iq' + i + '" min="1" max="5" step="1" value="3"><output id="io' + i + '" for="iq' + i + '">3</output></div>';
+    row.innerHTML = '<label for="iq' + i + '">' + (i + 1) + ". " + esc(q) + '</label><div class="r"><input type="range" id="iq' + i + '" min="1" max="5" step="1" value="3" class="unset"><output id="io' + i + '" for="iq' + i + '">&ndash;</output></div>';
     wrap.appendChild(row);
     row.querySelector("input").addEventListener("input", function (e) {
-      vals[i] = +e.target.value; $("io" + i).textContent = e.target.value; renderIdx();
+      vals[i] = +e.target.value; answered[i] = true; e.target.classList.remove("unset"); $("io" + i).textContent = e.target.value; progressIdx(); if (revealed) renderIdx();
     });
   });
   var bands = [
@@ -931,11 +947,24 @@ details.more > :not(summary) { margin-top: 12px; }
     $("idxPin").style.left = ((total - 10) / 40 * 100) + "%";
     var order = vals.map(function (v, i) { return [v, i]; }).sort(function (a, c) { return a[0] - c[0] || a[1] - c[1]; }).slice(0, 3);
     $("idxFirst").innerHTML = order.map(function (o) { return "<li>" + esc(qs[o[1]]) + " (you scored " + o[0] + ")</li>"; }).join("");
-    idxSummary = "My BUSYness Index: " + total + "/50 (" + b.name + "). Before it kills your business: take the Index at www.STOPBUSY.com #KILLBUSYness";
+    idxSummary = "My BUSYness Index: " + total + "/50 (" + b.name + "). Before it kills your business: take the Index at www.endbusy.com #KILLBUSYness";
     $("idxLinkedIn").href = "https://www.linkedin.com/feed/?shareActive=true&text=" + encodeURIComponent(idxSummary);
   }
+  function progressIdx() {
+    var n = answered.filter(Boolean).length;
+    $("idxCount").textContent = n + " of 10 answered";
+    $("idxBar").style.width = (n * 10) + "%";
+    $("idxShow").disabled = n < 10;
+    $("idxGoHint").textContent = n < 10 ? "Answer all ten to continue" : "All answered";
+  }
+  $("idxShow").addEventListener("click", function () {
+    revealed = true;
+    $("idxWait").hidden = true; $("idxResult").hidden = false;
+    renderIdx();
+    try { $("idxResult").scrollIntoView({ behavior: "smooth", block: "start" }); } catch (e) {}
+  });
   $("idxCopy").addEventListener("click", function () { copy(idxSummary, $("idxCopyMsg"), "Result copied"); });
-  renderIdx();
+  progressIdx();
 
   /* ---- Chase Counter ---- */
   var cur = $("cCur");
@@ -992,7 +1021,7 @@ details.more > :not(summary) { margin-top: 12px; }
     $("plWho").textContent = name || "Your name";
     $("plRole2").textContent = role || "Role and company";
     $("plVis").textContent = pub ? "Listed on the public pledge wall" : "Private pledge";
-    plSummary = "I have taken the " + p.name + ". " + p.text + (name ? " — " + name + (role ? ", " + role : "") : "") + " Join me at www.STOPBUSY.com #KILLBUSYness";
+    plSummary = "I have taken the " + p.name + ". " + p.text + (name ? " — " + name + (role ? ", " + role : "") : "") + " Join me at www.endbusy.com #KILLBUSYness";
     $("plLinkedIn").href = "https://www.linkedin.com/feed/?shareActive=true&text=" + encodeURIComponent(plSummary);
   }
   ["plName", "plRole"].forEach(function (id) { $(id).addEventListener("input", renderPledge); });
