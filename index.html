@@ -376,6 +376,21 @@ input[type=range].unset { opacity: 0.5; }
 .idxlinks { margin: 14px 0 0; font-size: 0.9rem; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 .idxlinks a, .linkbtn { color: var(--gold); font-weight: 600; text-decoration: underline; background: none; border: 0; padding: 0; font-family: inherit; font-size: inherit; cursor: pointer; }
 #idxCapture button { white-space: nowrap; }
+/* Chase Counter redesign */
+.fgroup { font-size: 0.74rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); font-weight: 700; margin: 0 0 10px; }
+.fgroup:not(:first-child) { margin-top: 26px; padding-top: 18px; border-top: 1px solid var(--line); }
+.opp { margin-top: 22px; padding-top: 18px; border-top: 1px solid var(--line); }
+.oppask { margin: 8px 0 0; color: var(--muted); font-size: 0.98rem; line-height: 1.5; }
+.oppbelief { margin: 10px 0 12px; font-size: 1rem; line-height: 1.5; }
+.oppbelief b { color: var(--red); }
+.orow { display: grid; grid-template-columns: 5.5rem 1fr; gap: 2px 12px; padding: 10px 0; border-top: 1px solid var(--line); align-items: baseline; }
+.orow > span:first-child { font-weight: 700; font-size: 0.9rem; }
+.orow .from { color: var(--muted); font-size: 0.9rem; }
+.orow b { grid-column: 2; font-size: 1.25rem; color: var(--ink); }
+.orow[hidden] { display: none; }
+.hpoline { margin: 14px 0 8px; font-size: 0.98rem; line-height: 1.5; }
+.found { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 0; }
+.found li { border: 1px solid var(--gold-line); padding: 5px 10px; font-size: 0.85rem; font-weight: 600; color: var(--gold); }
 /* Your move: outcome-led list */
 .beat .choices a { grid-template-columns: minmax(0, 1fr) auto; gap: 6px 20px; align-items: center; }
 .beat .choices .ck, .beat .choices b, .beat .choices em { grid-column: 1; }
@@ -643,30 +658,57 @@ details.more > :not(summary) { margin-top: 12px; }
 </div>
   <div class="view" data-view="chase" hidden>
   <ol class="journey" aria-label="Your path"><li><a href="#index">The mirror</a></li><li class=on><a href="#chase" aria-current=step>The cost</a></li><li><a href="#pledge">The pledge</a></li><li><a href="#team">Your team</a></li></ol>
-  <div class="vhead"><div class="eyebrow">Step 2 · The cost</div><h2 tabindex="-1">The Chase Counter</h2><p class="lead">Follow-up is not coordination. It is compensation for missing ownership. Count today's chasing, then see what it costs in a year. The figures below are examples. Replace them with yours.</p></div>
+  <div class="vhead"><div class="eyebrow">Step 2 · The cost</div><h2 tabindex="-1">The Chase Counter</h2><p class="lead">Follow-up is not coordination. It is compensation for missing ownership. Enter your own numbers to see what chasing costs you every year, and what it keeps you from building.</p></div>
   <div class="two">
       <div class="panel">
+        <div class="fgroup">Your chasing</div>
         <div class="fields">
-          <div class="field"><label for="cSent">Follow-ups you sent today</label><input id="cSent" type="number" min="0" step="1" value="25"><div class="hint">Messages, emails, calls to chase work</div></div>
-          <div class="field"><label for="cRecv">Follow-ups where you were chased</label><input id="cRecv" type="number" min="0" step="1" value="12"></div>
-          <div class="field"><label for="cMin">Average minutes per follow-up</label><input id="cMin" type="number" min="0" step="0.5" value="3"><div class="hint">About 1 for a short message, 5 for a call</div></div>
-          <div class="field"><label for="cDays">Working days a year</label><input id="cDays" type="number" min="1" step="1" value="230"></div>
-          <div class="field"><label for="cTeam">People who chase like this</label><input id="cTeam" type="number" min="1" step="1" value="10"><div class="hint">You plus your leaders and managers</div></div>
-          <div class="field"><label for="cCur">Currency</label><select id="cCur"><option value="INR">₹ Indian rupee</option><option value="USD">$ US dollar</option></select></div>
-          <div class="field" style="grid-column:1/-1"><label for="cCost">Average yearly cost of one person</label><input id="cCost" type="number" min="0" step="10000" value="2500000"><div class="hint">Salary plus benefits and overhead. Assumes 1,840 paid hours a year.</div></div>
+          <div class="field"><label for="cSent">Follow-ups you sent today</label><input id="cSent" type="number" inputmode="decimal" min="0" step="1" placeholder="e.g. 25"><div class="hint">Messages, emails, calls to chase work</div></div>
+          <div class="field"><label for="cRecv">Follow-ups where you were chased</label><input id="cRecv" type="number" inputmode="decimal" min="0" step="1" placeholder="e.g. 12"></div>
+          <div class="field"><label for="cMin">Average minutes per follow-up</label><input id="cMin" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g. 3"><div class="hint">Optional. Blank uses 3. About 1 for a message, 5 for a call</div></div>
+          <div class="field"><label for="cDays">Working days a year</label><input id="cDays" type="number" inputmode="decimal" min="1" step="1" placeholder="e.g. 230"><div class="hint">Optional. Blank uses 230</div></div>
+          <div class="field"><label for="cTeam">People who chase like this</label><input id="cTeam" type="number" inputmode="decimal" min="1" step="1" placeholder="e.g. 10"><div class="hint">You plus your leaders and managers</div></div>
+        </div>
+        <div class="fgroup">Your organization</div>
+        <div class="fields">
+          <div class="field"><label for="cCur">Currency</label><select id="cCur"><option value="INR">&#8377; Indian rupee</option><option value="USD">$ US dollar</option></select></div>
+          <div class="field"><label for="cCost">Average yearly cost of one person</label><input id="cCost" type="number" inputmode="decimal" min="0" step="10000" placeholder="e.g. 2500000"><div class="hint">Salary plus benefits and overhead. Assumes 1,840 paid hours a year</div></div>
+          <div class="field"><label for="cRev" id="cRevL">Current yearly revenue (&#8377; crore)</label><input id="cRev" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 150"><div class="hint">Optional. Needed for the opportunity cost</div></div>
+          <div class="field"><label for="cProf" id="cProfL">Current yearly profit (&#8377; crore)</label><input id="cProf" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 15"><div class="hint">Optional. Needed for the opportunity cost</div></div>
         </div>
       </div>
       <div class="panel sticky" aria-live="polite">
-        <div class="eyebrow" style="margin:0">Yearly cost of chasing</div>
-        <div class="big" id="cBig">0</div>
-        <div class="mini">
-          <div><b id="cMine">0</b><span>hours a year, just you</span></div>
-          <div><b id="cTeamH">0</b><span>hours a year, your group</span></div>
-          <div><b id="cFte">0</b><span>full-time people</span></div>
-          <div><b id="cDays2">0</b><span>working days a year, just you</span></div>
+        <div id="cWait" class="idxwait">
+          <div class="eyebrow" style="margin:0">Your <span class="bz"><b>BUSY</b>ness</span> cost</div>
+          <p class="idxhint">Enter your follow-ups, the number of people who chase, and the yearly cost of one person. Your result appears here.</p>
+          <div class="idxprog"><i id="cBar"></i></div>
+          <p class="idxcount" id="cCount">0 of 3 required answers</p>
         </div>
-        <p class="ask">What would you build with those hours?</p>
-        <p class="note">Based on your own inputs, not on a survey. The standard that ends this is NFR: No Follow-Up Required.</p>
+        <div id="cResult" hidden>
+          <div class="eyebrow" style="margin:0">Your <span class="bz"><b>BUSY</b>ness</span> cost, every year</div>
+          <div class="big" id="cBig">0</div>
+          <div class="mini">
+            <div><b id="cMine">0</b><span>hours a year, just you</span></div>
+            <div><b id="cTeamH">0</b><span>hours a year, your group</span></div>
+            <div><b id="cFte">0</b><span>full-time people</span></div>
+            <div><b id="cDays2">0</b><span>working days a year, just you</span></div>
+          </div>
+          <div class="opp">
+            <div class="eyebrow" style="margin:0">The Opportunity Cost</div>
+            <p class="oppask" id="cOppAsk">Add your current revenue and profit on the left to see the opportunity you are leaving on the table.</p>
+            <div id="cOpp" hidden>
+              <p class="oppbelief">We believe a High Purpose, High Performance Organization (HPO) has the opportunity to reach <b>100X revenue</b> and <b>100X profit</b> in 10 years.</p>
+              <div class="orow" id="cRevRow"><span>Revenue</span><span class="from" id="cRevFrom"></span><b id="cRevTo"></b></div>
+              <div class="orow" id="cProfRow"><span>Profit</span><span class="from" id="cProfFrom"></span><b id="cProfTo"></b></div>
+            </div>
+            <p class="hpoline">If you were an HPO, you would have the opportunity to be 100X in 10 years. It rests on four foundations:</p>
+            <ul class="found"><li>Lived Purpose</li><li>Researched Strategy</li><li>Right Competency</li><li>Committed Leadership</li></ul>
+            <div class="row-btns" style="justify-content:flex-start;margin-top:14px"><a class="btn" href="#work">Talk to us about your path to HPO</a></div>
+            <p class="idxlinks"><a href="#pledge">Take the pledge</a><span aria-hidden="true">&middot;</span><button class="linkbtn" id="cCopy" type="button">Share these numbers with your leadership team</button></p>
+            <div class="toast" id="cCopyMsg" role="status"></div>
+          </div>
+          <p class="note">Based on your own inputs, not on a survey. The 100X is our belief of what is possible, not a forecast. The standard that ends chasing is NFR: No Follow-Up Required.</p>
+        </div>
       </div>
     </div>
   <a class="nextbar" href="#pledge"><span class="nk">Next</span><b>Make a promise: take a pledge</b><i aria-hidden="true">&rarr;</i></a>
@@ -971,28 +1013,59 @@ details.more > :not(summary) { margin-top: 12px; }
   function money(n) {
     n = Math.round(n);
     if (cur.value === "INR") {
-      if (n >= 1e7) return "₹" + (n / 1e7).toFixed(2) + " crore";
+      if (n >= 1e7) { var c = n / 1e7; return "₹" + c.toLocaleString("en-IN", { maximumFractionDigits: c >= 100 ? 0 : 2 }) + " crore"; }
       if (n >= 1e5) return "₹" + (n / 1e5).toFixed(2) + " lakh";
       return "₹" + n.toLocaleString("en-IN");
     }
+    if (n >= 1e12) return "$" + (n / 1e12).toFixed(2) + "T";
+    if (n >= 1e9) return "$" + (n / 1e9).toFixed(2) + "B";
     if (n >= 1e6) return "$" + (n / 1e6).toFixed(2) + "M";
     if (n >= 1e3) return "$" + (n / 1e3).toFixed(1) + "K";
     return "$" + n.toLocaleString("en-US");
   }
-  function num(id) { var v = parseFloat($(id).value); return isFinite(v) && v >= 0 ? v : 0; }
+  function raw(id) { var v = parseFloat($(id).value); return isFinite(v) && v >= 0 ? v : null; }
+  function numd(id, d) { var v = raw(id); return v === null ? d : v; }
+  function unitAmt() { return cur.value === "INR" ? 1e7 : 1e6; }
+  var chaseSummary = "";
   function renderChase() {
-    var mins = (num("cSent") + num("cRecv")) * num("cMin");
-    var mine = mins / 60 * num("cDays");
-    var team = mine * Math.max(1, num("cTeam"));
-    var rate = num("cCost") / 1840;
-    $("cBig").textContent = money(team * rate);
+    var sent = numd("cSent", 0), recv = numd("cRecv", 0), team = raw("cTeam"), cost = raw("cCost");
+    var okF = (sent + recv) > 0, okT = team !== null && team >= 1, okC = cost !== null && cost > 0;
+    var need = [okF, okT, okC].filter(Boolean).length;
+    $("cBar").style.width = (need / 3 * 100) + "%";
+    $("cCount").textContent = need + " of 3 required answers";
+    var ready = okF && okT && okC;
+    $("cWait").hidden = ready; $("cResult").hidden = !ready;
+    if (!ready) return;
+    var mins = (sent + recv) * numd("cMin", 3);
+    var mine = mins / 60 * numd("cDays", 230);
+    var tm = mine * team;
+    var yearly = tm * cost / 1840;
+    $("cBig").textContent = money(yearly);
     $("cMine").textContent = Math.round(mine).toLocaleString("en-IN");
-    $("cTeamH").textContent = Math.round(team).toLocaleString("en-IN");
-    $("cFte").textContent = (team / 1840).toFixed(1);
+    $("cTeamH").textContent = Math.round(tm).toLocaleString("en-IN");
+    $("cFte").textContent = (tm / 1840).toFixed(1);
     $("cDays2").textContent = (mine / 8).toFixed(0);
+    var rev = raw("cRev"), prof = raw("cProf"), u = unitAmt();
+    var hasRev = rev !== null && rev > 0, hasProf = prof !== null && prof > 0;
+    $("cOppAsk").hidden = hasRev || hasProf; $("cOpp").hidden = !(hasRev || hasProf);
+    $("cRevRow").hidden = !hasRev; $("cProfRow").hidden = !hasProf;
+    var s = "My BUSYness cost: " + money(yearly) + " a year.";
+    if (hasRev) { $("cRevFrom").textContent = money(rev * u) + " today"; $("cRevTo").textContent = money(rev * u * 100) + " in 10 years"; s += " Revenue opportunity as an HPO: " + money(rev * u * 100) + "."; }
+    if (hasProf) { $("cProfFrom").textContent = money(prof * u) + " today"; $("cProfTo").textContent = money(prof * u * 100) + " in 10 years"; s += " Profit opportunity: " + money(prof * u * 100) + "."; }
+    chaseSummary = s + " (We believe a High Purpose, High Performance Organization can be 100X in 10 years.) Work out yours at www.endbusy.com #KILLBUSYness";
   }
-  ["cSent", "cRecv", "cMin", "cDays", "cTeam", "cCost"].forEach(function (id) { $(id).addEventListener("input", renderChase); });
-  cur.addEventListener("change", function () { $("cCost").value = cur.value === "INR" ? 2500000 : 120000; renderChase(); });
+  ["cSent", "cRecv", "cMin", "cDays", "cTeam", "cCost", "cRev", "cProf"].forEach(function (id) { $(id).addEventListener("input", renderChase); });
+  function curChange() {
+    var inr = cur.value === "INR";
+    $("cCost").placeholder = inr ? "e.g. 2500000" : "e.g. 120000";
+    $("cRevL").textContent = "Current yearly revenue (" + (inr ? "₹ crore" : "$ million") + ")";
+    $("cProfL").textContent = "Current yearly profit (" + (inr ? "₹ crore" : "$ million") + ")";
+    $("cRev").placeholder = inr ? "e.g. 150" : "e.g. 20";
+    $("cProf").placeholder = inr ? "e.g. 15" : "e.g. 2";
+    renderChase();
+  }
+  cur.addEventListener("change", curChange);
+  $("cCopy").addEventListener("click", function () { copy(chaseSummary, $("cCopyMsg"), "Copied. Paste it to your leadership team."); });
   renderChase();
 
   /* ---- Pledges (draft wording) ---- */
